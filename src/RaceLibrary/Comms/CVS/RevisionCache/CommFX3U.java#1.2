@@ -1,0 +1,110 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package RaceLibrary.Comms;
+
+import gnu.io.CommPort;
+import gnu.io.CommPortIdentifier;
+import gnu.io.SerialPort;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ *
+ * @author Brian
+ */
+public class CommFX3U extends Thread {
+
+    //SerialComms comm;
+
+    boolean     portOpen;
+
+    String      portName;
+
+    public CommFX3U() {
+        //comm = new SerialComms();
+        portName = "COM1";
+        portOpen = false;
+    }
+
+    public void setPort(String name) {
+        portName = name;
+    }
+
+
+    public void open() {
+        portOpen = false;
+//        comm.setSpeed(57600,SerialPort.DATABITS_7,SerialPort.STOPBITS_1,SerialPort.PARITY_EVEN);
+//        int status = comm.connect(portName);
+//        if (status != 0) {
+//            //TODO: there is a problem
+//            return;
+//        }
+        portOpen = true;
+    }
+
+    @Override
+    public void run() {
+        byte buffer[] = new byte[2048];
+
+//        while (true) {
+//            int msec = 20;
+//
+//            if (!portOpen) open();
+//            try {
+//                int nbytes = comm.input.read(buffer);
+//                System.out.println("Bytes read = " + nbytes);
+//            } catch (IOException ex) {
+//                portOpen = false;
+//                comm.close();
+//                msec = 2000;
+//            }
+//
+//            try {
+//                sleep(msec);
+//            } catch (InterruptedException ex) {
+//
+//            }
+//        }
+
+    }
+
+
+    public void readWords() {
+        byte oBuffer[] = new byte[128];
+
+        oBuffer[ 0] = 0x05;
+        oBuffer[ 1] = '0';
+        oBuffer[ 2] = '0';
+        oBuffer[ 3] = 'F';
+        oBuffer[ 4] = 'F';
+        oBuffer[ 5] = 'W';
+        oBuffer[ 6] = 'R';
+        oBuffer[ 7] = '0';
+        oBuffer[ 8] = 'D';
+        oBuffer[ 9] = '0';
+        oBuffer[10] = '1';
+        oBuffer[11] = '0';
+        oBuffer[12] = '0';
+        oBuffer[13] = '0';
+        oBuffer[14] = '2';
+
+        int sum = 0;
+        for (int i=1;i<=14;i++) {
+            sum += (int) oBuffer[i];
+        }
+        String ssum = Integer.toHexString(sum);
+        ssum = ssum.toUpperCase();
+        int len = ssum.length();
+        oBuffer[15] = (byte) ssum.charAt(len-2);
+        oBuffer[16] = (byte) ssum.charAt(len-1);
+//        try {
+//            comm.output.write(oBuffer, 0, 17);
+//        } catch (IOException ex) {
+//            //Logger.getLogger(CommFX3U.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+    }
+}

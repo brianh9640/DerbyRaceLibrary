@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : dbStructure.xml
+    Created on : April 9, 2009, 7:32 PM
+    Author     : Brian
+    Description:
+        Purpose of the document follows.
+-->
+
+<database>
+    <structure version='00.09.03.00'>
+        <sql>
+            CREATE TABLE raceconfig (
+                cfgid INT NOT NULL,
+                subid INT NOT NULL,
+                name VARCHAR(32) NOT NULL,
+                value VARCHAR(128) NOT NULL
+            )
+        </sql>
+        <sql>
+            CREATE UNIQUE INDEX raceconfig_cfgid_index ON raceconfig (cfgid)
+        </sql>
+
+        <sql>
+            CREATE TABLE roster (
+                racerid INT NOT NULL GENERATED ALWAYS AS IDENTITY,
+                carid INT NOT NULL,
+                lastname VARCHAR(32) NOT NULL,
+                firstname VARCHAR(32) NOT NULL,
+                groupid INT NOT NULL,
+                picid INT NOT NULL,
+                weight FLOAT NOT NULL,
+                pass INT NOT NULL
+            )
+        </sql>
+        <sql>
+            CREATE UNIQUE INDEX roster_racerid_index ON roster (racerid)
+        </sql>
+        <sql>
+            CREATE UNIQUE INDEX roster_carid_index ON roster (groupid,carid)
+        </sql>
+        <sql>
+            CREATE INDEX roster_groupid_index ON roster (groupid)
+        </sql>
+
+        <sql>
+            CREATE TABLE pictures (
+                picid INT NOT NULL primary key,
+                pic BLOB(16M)
+            )
+        </sql>
+
+        <sql>
+            CREATE TABLE races (
+                raceid INT NOT NULL,
+                groupid INT NOT NULL,
+                racetype INT NOT NULL,
+                title VARCHAR(64) NOT NULL,
+                heats INT NOT NULL,
+                heat INT NOT NULL
+            )
+        </sql>
+
+        <sql>
+            CREATE UNIQUE INDEX races_raceid_index ON races (raceid)
+        </sql>
+
+        <sql>
+            CREATE INDEX races_groupid_index ON races (groupid)
+        </sql>
+
+        <sql>
+            CREATE TABLE results (
+                resultid INT NOT NULL GENERATED ALWAYS AS IDENTITY,
+                raceid INT NOT NULL,
+                heat INT NOT NULL,
+                lane INT NOT NULL,
+                racerid INT NOT NULL,
+                time DOUBLE NOT NULL,
+                place INT NOT NULL,
+                points INT NOT NULL,
+                speed DOUBLE NOT NULL,
+                invalidtime INT NOT NULL
+            )
+        </sql>
+
+        <sql>
+            CREATE UNIQUE INDEX results_resultid_index ON results (resultid)
+        </sql>
+        <sql>
+            CREATE UNIQUE INDEX results_heatlane_index ON results (raceid,heat,lane)
+        </sql>
+        <sql>
+            CREATE INDEX results_racer_index ON results (racerid)
+        </sql>
+
+
+        <sql>
+            CREATE TABLE winners (
+                winnerid INT NOT NULL GENERATED ALWAYS AS IDENTITY,
+                raceid INT NOT NULL,
+                racerid INT NOT NULL,
+                place INT NOT NULL,
+                avgtime DOUBLE NOT NULL,
+                points INT NOT NULL
+            )
+        </sql>
+        <sql>
+            CREATE UNIQUE INDEX winners_race_racer_index ON winners (raceid,racerid)
+        </sql>
+        <sql>
+            CREATE INDEX winners_racer_index ON winners (racerid)
+        </sql>
+
+
+        <sql>
+            INSERT INTO raceconfig (cfgid,subid,name,value)
+                VALUES (1,1,'Database Version','00.09.10.00')
+        </sql>
+        <sql>
+            INSERT INTO raceconfig (cfgid,subid,name,value)
+                VALUES (50,1,'Race Title',' ')
+        </sql>
+        <sql>
+            INSERT INTO raceconfig (cfgid,subid,name,value)
+                VALUES (51,1,'Org Name',' ')
+        </sql>
+        <sql>
+            INSERT INTO raceconfig (cfgid,subid,name,value)
+                VALUES (110,1,'IP Address','10.10.10.10')
+        </sql>
+        <sql>
+            INSERT INTO raceconfig (cfgid,subid,name,value)
+                VALUES (170,1,'Max Time','10.000')
+        </sql>
+        <sql>
+            INSERT INTO raceconfig (cfgid,subid,name,value)
+                VALUES (210,1,'# of Lanes','4')
+        </sql>
+        <sql>
+            INSERT INTO raceconfig (cfgid,subid,name,value)
+                VALUES (220,1,'Times per Lane','1')
+        </sql>
+        <sql>
+            INSERT INTO raceconfig (cfgid,subid,name,value)
+                VALUES (230,1,'Scoring Method','1')
+        </sql>
+        <sql>
+            INSERT INTO raceconfig (cfgid,subid,name,value)
+                VALUES (300,1,'# of Groups','1')
+        </sql>
+        <sql>
+            INSERT INTO raceconfig (cfgid,subid,name,value)
+                VALUES (310,1,'Group 1 Name','Group 1')
+        </sql>
+        <sql>
+            INSERT INTO raceconfig (cfgid,subid,name,value)
+                VALUES (320,1,'Group 2 Name','Group 2')
+        </sql>
+        <sql>
+            INSERT INTO raceconfig (cfgid,subid,name,value)
+                VALUES (330,1,'Group 3 Name','Group 3')
+        </sql>
+        <sql>
+            INSERT INTO raceconfig (cfgid,subid,name,value)
+                VALUES (340,1,'Group 4 Name','Group 4')
+        </sql>
+        <sql>
+            INSERT INTO raceconfig (cfgid,subid,name,value)
+                VALUES (410,1,'Track Length','37')
+        </sql>
+        <sql>
+            INSERT INTO raceconfig (cfgid,subid,name,value)
+                VALUES (420,1,'MPH Scale','25')
+        </sql>
+    </structure>
+
+</database>
